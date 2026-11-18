@@ -41,7 +41,7 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .hdr-r{display:flex;align-items:center;gap:16px;margin-left:auto}
 .hdr-ph{font-size:16px;font-weight:600;transition:color .3s}
 .hdr-ph:active{color:var(--green)}
-.ico{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;border:1.5px solid var(--line);color:var(--ink);transition:color .3s,border-color .3s}
+.ico{background:#fff;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;border:1.5px solid var(--line);color:var(--ink);transition:color .3s,border-color .3s}
 .ico svg{width:20px;height:20px}
 .ico:active{border-color:var(--green);color:var(--green)}
 @media(hover:hover){.nav a:hover,.hdr-ph:hover{color:var(--green)}.ico:hover{border-color:var(--green);color:var(--green)}}
@@ -82,25 +82,31 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .sh-row{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px;max-width:none}
 .sh-row>div{max-width:960px}
 
-/* первый экран */
-.hero{background:var(--bg2);overflow:clip;padding-bottom:24px}
-.hero-g{display:grid;gap:24px;padding-top:40px}
-.hero .eb{margin-bottom:24px}
-.hero .lead{margin-top:24px;max-width:680px}
+/* первый экран: тёмно-зелёный, мастер справа стоит за полосой направлений */
+.hero{position:relative;background:var(--green-dark);color:#fff;overflow:clip;padding-bottom:24px}
+.hero .eb{color:#fff;margin-bottom:24px}
+.hero .lead{color:rgba(255,255,255,.78);margin-top:24px;max-width:640px}
+.hero-g{display:grid;padding-top:40px}
 .hero-act{display:flex;flex-wrap:wrap;gap:8px;margin-top:32px}
-.hero-ph{position:relative;height:320px}
+.hero-ph{position:relative;height:340px;margin-top:24px;margin-bottom:-56px;pointer-events:none}
 .hero-ph img{position:absolute;bottom:0;left:50%;transform:translateX(-50%);height:100%;width:auto;max-width:none}
 @media(max-width:767px){.hero-act .btn{width:100%}}
-@media(min-width:768px){.hero .lead{margin-top:32px}.hero-act{margin-top:40px}.hero-ph{height:440px}}
+@media(min-width:768px){.hero .lead{margin-top:32px}.hero-act{margin-top:40px}.hero-ph{height:460px}}
 @media(min-width:1024px){
   .hero{padding-bottom:40px}
-  .hero-g{grid-template-columns:1.45fr .55fr;align-items:end;padding-top:0}
-  .hero-tx{padding-block:120px}
-  .hero-ph{height:100%;min-height:560px}
+  .hero-g{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch;padding-top:0;min-height:min(calc(var(--vh)*100 - var(--hdr) - 160px),640px)}
+  .hero-tx{position:relative;z-index:1;padding-block:96px 120px;align-self:center}
+  .hero-ph{height:auto;margin:0 0 -56px}
+  .hero-ph img{height:calc(100% - 40px);left:auto;right:0;transform:none}
 }
+@media(min-width:1280px){.hero-g{grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr)}.hero-ph img{right:-40px}}
+@media(min-width:1680px){.hero-g{min-height:min(calc(var(--vh)*100 - var(--hdr) - 160px),760px)}}
+.btn-o{background:transparent;border-color:rgba(255,255,255,.4);color:#fff}
+.btn-o:active{background:#fff;border-color:#fff;color:var(--ink)}
+@media(hover:hover){.btn-o:hover{background:#fff;border-color:#fff;color:var(--ink)}}
 /* полоса направлений внизу первого экрана */
-.dirs{position:relative;z-index:1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.dirs a{display:flex;align-items:center;gap:12px;min-height:64px;padding:12px 16px;background:#fff;border:1px solid var(--line);border-radius:12px;font-size:15px;font-weight:600;line-height:1.2;transition:border-color .3s,color .3s}
+.dirs{position:relative;z-index:2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.dirs a{display:flex;align-items:center;gap:12px;min-height:64px;padding:12px 16px;background:#fff;color:var(--ink);border:1px solid #fff;border-radius:12px;font-size:15px;font-weight:600;line-height:1.2;transition:border-color .3s,color .3s}
 .dirs svg{flex:none;width:24px;height:24px;color:var(--green)}
 .dirs a:active{border-color:var(--green);color:var(--green)}
 @media(hover:hover){.dirs a:hover{border-color:var(--green);color:var(--green)}}

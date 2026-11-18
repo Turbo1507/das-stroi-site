@@ -206,7 +206,7 @@ function write(rel, html) {
       <p class="eb">${t(S.region)}</p>
       <h1 class="h1">${t(S.slogan)}</h1>
       <p class="lead">${t(S.subtitle)}</p>
-      <div class="hero-act"><a class="btn btn-p" href="#contacts">Обсудить проект</a><a class="btn btn-s" href="#projects">Посмотреть проекты</a></div>
+      <div class="hero-act"><a class="btn btn-w" href="#contacts">Обсудить проект</a><a class="btn btn-o" href="#projects">Посмотреть проекты</a></div>
     </div>
     <div class="hero-ph"><img src="img/hero2.webp" alt="Инженер ${S.name}" width="1192" height="1800" fetchpriority="high"></div>
   </div>
