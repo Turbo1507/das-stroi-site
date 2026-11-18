@@ -125,14 +125,26 @@ const photo = (r, s, cls) => s.img
   ? `<div class="${cls}"><img src="${r}img/${enc(s.img)}" alt="${esc(s.alt)}" width="1200" height="900" loading="lazy" decoding="async"></div>`
   : `<div class="${cls} draw">${I.pipes}</div>`;
 
+const SVC_IC = {
+  kotelnaya: '<path d="M12 3c2 3 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-8z"/>',
+  otoplenie: '<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 6v12M11 6v12M15 6v12M19 6v12M5 21h2M17 21h2"/>',
+  vodosnabzhenie: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/><path d="M9 15a3 3 0 0 0 3 3"/>',
+  avtomatika: '<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M10 18h4"/><circle cx="12" cy="10" r="3"/><path d="M12 7V5M12 15v-2"/>',
+  ventilyaciya: '<circle cx="12" cy="12" r="2"/><path d="M12 10c0-4 1-7 4-7 2 0 2 3 0 5M14 12c4 0 7 1 7 4 0 2-3 2-5 0M12 14c0 4-1 7-4 7-2 0-2-3 0-5M10 12c-4 0-7-1-7-4 0-2 3-2 5 0"/>',
+  'naruzhnye-seti': '<path d="M2 9h6v6h8V9h6"/><rect x="7" y="13" width="2" height="6"/><rect x="15" y="13" width="2" height="6"/><path d="M2 21h20"/>'
+};
+const svcIc = (s) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${SVC_IC[s.slug]}</svg>`;
+
 const card = (r, s) => `<a class="card" href="${r}uslugi/${s.slug}/">
         ${photo(r, s, 'card-ph')}
-        <div class="card-b"><h3 class="h3">${t(s.title)}</h3><p class="txt">${t(s.card)}</p><span class="btn btn-s">Смотреть услуги</span></div>
+        <div class="card-b"><h3 class="h3">${t(s.title)}</h3><p class="txt">${t(s.card)}</p>
+          <ul class="tags">${s.items.slice(0, 2).map(([h]) => `<li>${t(h)}</li>`).join('')}<li>ещё ${s.items.length - 2}</li></ul>
+          <span class="btn btn-s">Смотреть услуги</span></div>
       </a>`;
 
 const sh = (h, lead, tag = 'h2') => `<div class="sh"><${tag} class="h2">${t(h)}</${tag}>${lead ? `<p class="lead">${t(lead)}</p>` : ''}</div>`;
 
-const steps = (list) => `<div class="tiles">${list.map((x, i) => `<div class="tile"><span class="num">${String(i + 1).padStart(2, '0')}</span><h3 class="h3">${t(x)}</h3></div>`).join('')}</div>`;
+const steps = (list) => `<ol class="tiles steps">${list.map((x, i) => { const [h, p] = Array.isArray(x) ? x : [x, '']; return `<li class="tile"><span class="num">${String(i + 1).padStart(2, '0')}</span><h3 class="h3">${t(h)}</h3>${p ? `<p class="txt">${t(p)}</p>` : ''}</li>`; }).join('')}</ol>`;
 
 function form(r, pre) {
   const opt = (arr, sel) => arr.map((o) => `<option${o === sel ? ' selected' : ''}>${esc(o)}</option>`).join('');
@@ -195,9 +207,13 @@ function write(rel, html) {
       <h1 class="h1">${t(S.slogan)}</h1>
       <p class="lead">${t(S.subtitle)}</p>
       <div class="hero-act"><a class="btn btn-p" href="#contacts">Обсудить проект</a><a class="btn btn-s" href="#projects">Посмотреть проекты</a></div>
-      <div class="facts">${S.facts.map((f) => `<div><b>${f.num}</b><span>${t(f.text)}</span></div>`).join('')}</div>
     </div>
     <div class="hero-ph"><img src="img/hero2.webp" alt="Инженер ${S.name}" width="1192" height="1800" fetchpriority="high"></div>
+  </div>
+  <div class="wrap">
+    <nav class="dirs" aria-label="Направления">
+      ${D.services.map((s) => `<a href="uslugi/${s.slug}/">${svcIc(s)}<span>${t(s.short)}</span></a>`).join('\n      ')}
+    </nav>
   </div>
 </section>
 
@@ -212,19 +228,28 @@ function write(rel, html) {
 
 <section class="sec alt" id="why">
   <div class="wrap">
-    ${sh('Почему ДАС-СТРОЙ', 'Один подрядчик для взаимосвязанных инженерных задач: комплектация, монтаж, настройка и автоматизация')}
-    <div class="tiles">
-      ${D.advantages.map(([h, p], i) => `<div class="tile">${ic(I.adv[i])}<h3 class="h3">${t(h)}</h3><p class="txt">${t(p)}</p></div>`).join('\n      ')}
-      <div class="tile tile-cta"><div><h3 class="h3">${t('Расскажите о вашем объекте')}</h3><p class="txt">${t('Подберём решение и составим смету')}</p></div><a class="btn btn-w" href="#contacts">Обсудить проект</a></div>
+    <div class="why-g">
+      <div class="why-l">
+        <h2 class="h2">Почему ДАС-СТРОЙ</h2>
+        <p class="lead">${t(S.whyLead)}</p>
+        <dl class="facts">${S.facts.map((f) => `<div><dt>${f.num}</dt><dd>${t(f.text)}</dd></div>`).join('')}</dl>
+      </div>
+      <div class="adv">
+        ${D.advantages.map(([h, p], i) => `<div class="tile">${ic(I.adv[i])}<h3 class="h3">${t(h)}</h3><p class="txt">${t(p)}</p></div>`).join('\n        ')}
+        <div class="tile tile-cta"><h3 class="h3">${t('Расскажите о вашем объекте')}</h3><a class="btn btn-w" href="#contacts">Обсудить проект</a></div>
+      </div>
     </div>
   </div>
 </section>
 
 <section class="sec" id="projects">
   <div class="wrap">
-    <div class="proj">
+    <div class="sh sh-row">
       <div><h2 class="h2">${t('Реализованные проекты')}</h2><p class="lead">${t('Фотографии объектов и монтажа публикуем в Telegram-канале')}</p></div>
-      <a class="btn btn-p" href="${S.channel.href}" target="_blank" rel="noopener noreferrer">${I.tg}Смотреть проекты</a>
+      <a class="btn btn-s" href="${S.channel.href}" target="_blank" rel="noopener noreferrer">${I.tg}Все проекты в Telegram</a>
+    </div>
+    <div class="gal">
+      ${D.gallery.map(([f, cap, slug]) => `<a class="gal-i" href="uslugi/${slug}/"><img src="img/${enc(f)}" alt="${esc(cap)}" width="1200" height="900" decoding="async"><span>${t(cap)}</span></a>`).join('\n      ')}
     </div>
   </div>
 </section>
